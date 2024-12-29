@@ -324,11 +324,17 @@ using namespace libtorrent;
 - (void)prioritizeNextPieces:(torrent_handle)th {
     piece_index_t next_required_piece = piece_index_t(0);
     
+    // if (firstPiece != piece_index_t(-1)) {
+    //     next_required_piece = firstPiece;
+    // } else if (required_pieces.size() > 0) {
+    //     next_required_piece = required_pieces[MIN_PIECES - 1];
+    //     next_required_piece++;
+    // }
+
     if (firstPiece != piece_index_t(-1)) {
         next_required_piece = firstPiece;
-    } else if (required_pieces.size() > 0) {
-        auto next_piece = std::min(MIN_PIECES, int(required_pieces.size()));
-        next_required_piece = required_pieces[next_piece - 1];
+    } else if (!required_pieces.empty() && required_pieces.size() >= MIN_PIECES) {
+        next_required_piece = required_pieces[MIN_PIECES - 1];
         next_required_piece++;
     }
     
